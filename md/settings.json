@@ -1,0 +1,13 @@
+{
+	"example":{
+		"name":"Example",
+		"id":"example",
+		"type":"md"
+	},
+	
+	"externallink":{
+		"name":"Example.com Main Page",
+		"id":"externallink",
+		"type":"http:\/\/example.com\/"
+	},
+}
