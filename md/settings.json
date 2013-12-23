@@ -1,13 +1,1 @@
-{
-	"example":{
-		"name":"Example",
-		"id":"example",
-		"type":"md"
-	},
-	
-	"externallink":{
-		"name":"Example.com Main Page",
-		"id":"externallink",
-		"type":"http:\/\/example.com\/"
-	},
-}
+{"sitename":"My Awesome Markdown Site","example":{"name":"Example Page","id":"example","type":"md"},"examplelink":{"name":"Some Site","id":"examplelink","type":"http:\/\/othersite.example.com\/"}}
