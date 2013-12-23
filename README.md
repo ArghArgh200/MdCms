@@ -9,7 +9,6 @@ Configuration's a breeze:
 Edit settings.json. Make sure there are no spaces or newlines outside the quotes. Escape /'s with a backslash (\) Example: http:\/\/github.com\/
 
 
-
 Uses Michel Fortin's PHP Markdown parser.
 
 Issues?

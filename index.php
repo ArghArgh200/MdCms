@@ -65,7 +65,7 @@ function generatePage($htmlmenu,$html) { //Actually makes the page, and bootstra
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>' .$menu[sitename]. '</title>
-<link href="/bootstrap.min.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.css" rel="stylesheet">
 <style>body { padding-top: 50px; } .mainbody { padding: 40px 15px; text-align: center; }</style>
 </head>
 <body>
@@ -80,7 +80,7 @@ function generatePage($htmlmenu,$html) { //Actually makes the page, and bootstra
 <span class="icon-bar">
 </span>
 </button>
-<a class="navbar-brand" href="/">Example Page</a>
+<a class="navbar-brand" href="/">'.$menu[sitename].'</a>
 </div>
 <div class="collapse navbar-collapse">
 <ul class="nav navbar-nav">
@@ -95,10 +95,8 @@ function generatePage($htmlmenu,$html) { //Actually makes the page, and bootstra
 '.$html.'
 </div>
 </div>
-<script src="/jquery-1.10.1.min.js">
-</script>
-<script src="/bootstrap.min.js">
-</script>
+<script src="//code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 </body>
 </html>';
 return $htmldoc;
