@@ -2,37 +2,41 @@
 // MdCms by Arghlex - Credits to John Gruber and Michel Fortin for their Markdown translators
 // Lines of confusing HTML and PHP by Arghlex
 
-// Configuration! Yay!
-// Edit this line and change it to the directory where this file will be in relation to your filesystem, (NOT your root HTTP directory)
-$main_directory="/var/www/";
-// Now, open up md/settings.json, and edit that. Make sure your syntax is correct or the site WILL crash!
+// Configuration
+// Open up md/settings.json, and edit that. Make sure your syntax is correct or the site WILL crash!
 // Helpful JSON syntax hints: the last entry in an array will not have a comma after it. The others will.
 
 // End configuration. Don't touch anything below this line unless you know what you're doing.
-chdir($main_directory); //Set working directory, and load up Michel Fortin's translator
-require_once($main_directory."php-markdown/Michelf/Markdown.inc.php");
+spl_autoload_register(function($class){
+        require preg_replace('{\\\\|_(?!.*\\\\)}', DIRECTORY_SEPARATOR, "php-markdown/".ltrim($class, '\\')).'.php'; //Seriously, though. This is the dumbest way to load a class I've ever seen. And I've seen some shit.
+});
+use \Michelf\Markdown;
 
-global $menu;
-$menu = json_decode(file_get_contents($main_directory."md/settings.json")); // Grabs configs, stores them globally.
-if ($menu===false){die("settings.json was not formatted properly! Go fix it!");}
-function generateMenu($menu){ //Generates the menu of pages.
+$menu = json_decode(file_get_contents("md/settings.json"),true);
+print_r($menu);
+function generateMenu($menu){ 
+//Generates the menu of pages.
+	global $menu;
+	global $main_directory;
 	$htmlmenu=''; //Set an empty variable so we can add thigns to it.
 	foreach ($menu as $menuentry){  // iterate through each menu's entry
-		if ($menuentry['type'] == "md" ){ //If it's an MD, link to it.
-			$htmlmenu=$htmlmenu.'<li><a href="/?page='.$menuentry['id'].'">'.$menuentry['name'].'</a></li>';
+		if ($menuentry[type] == "md" ){ //If it's an MD, link to it.
+			$htmlmenu=$htmlmenu.'<li><a href="/?page='.$menuentry[id].'">'.$menuentry[name].'</a></li>';
 		}else{ // if it's not, use a link instead.
-			$htmlmenu=$htmlmenu.'<li><a href="'.$menuentry['type'].'">'.$menuentry['name'].'</a></li>';
+			$htmlmenu=$htmlmenu.'<li><a href="'.$menuentry[type].'">'.$menuentry[name].'</a></li>';
 		}
 	}
 	return $htmlmenu;
 }
 
 function pickPage() { //Checks for the 'page' GET variable, and if the apge it specifies exists, grab the file. If it doesnt, get a 404 page. If it's not set, show the index.md page.
+	global $main_directory;
+	global $menu;
 	if (!isset($_GET['page'])){ //Varaible not set? show index page.
-		$text=file_get_contents($main_directory."md/index.md");
+		$text=file_get_contents("md/index.md");
 	}else{ //variable IS set, attempt to show corresponding page.
 		$request=filter_var($_GET['page'], FILTER_SANITIZE_STRING,FILTER_SANITIZE_SPECIAL_CHARS);
-		$text=file_get_contents($main_directory."md/".$request.".md");
+		$text=file_get_contents("md/".$request.".md");
 		if ($text === FALSE) {
 			$text="404 Not Found.
 ========";
@@ -42,20 +46,25 @@ function pickPage() { //Checks for the 'page' GET variable, and if the apge it s
 }
 
 function generateBody() {
+	global $menu;
+	global $main_directory;
 // Actually translate the .md to HTML.
 	$text = pickPage();
-	$html = Markdown::defaultTransform($text);
+	$parser=new Markdown;
+	$html = $parser->defaultTransform($text);
 	return $html;
 }
 
 function generatePage($htmlmenu,$html) { //Actually makes the page, and bootstraps it.
+	global $menu;
+	global $main_directory;
 	// cue ugly lines of bad HTML embedding and whatever. Sorry, HTML devs. Best I could make it look.
 	$htmldoc='<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>' .$sitename. '</title>
+<title>' .$menu[sitename]. '</title>
 <link href="/bootstrap.min.css" rel="stylesheet">
 <style>body { padding-top: 50px; } .mainbody { padding: 40px 15px; text-align: center; }</style>
 </head>
