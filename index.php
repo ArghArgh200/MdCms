@@ -13,7 +13,6 @@ spl_autoload_register(function($class){
 use \Michelf\Markdown;
 
 $menu = json_decode(file_get_contents("md/settings.json"),true);
-print_r($menu);
 function generateMenu($menu){ 
 //Generates the menu of pages.
 	global $menu;
@@ -65,7 +64,7 @@ function generatePage($htmlmenu,$html) { //Actually makes the page, and bootstra
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>' .$menu[sitename]. '</title>
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
 <style>body { padding-top: 50px; } .mainbody { padding: 40px 15px; text-align: center; }</style>
 </head>
 <body>
