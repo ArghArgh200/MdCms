@@ -21,7 +21,7 @@ function generateMenu($menu){
 		if ($menuentry[type] == "md" ){ //If it's an MD, link to it.
 			$htmlmenu=$htmlmenu.'<li><a href="/?page='.$menuentry[id].'">'.$menuentry[name].'</a></li>';
 		}else{ // if it's not, use a link instead. Check for the site name though!
-			if ($menuentry[type] != $menu[sitename]){
+			if ($menuentry[type] != $menu[sitename][0]){
 				$htmlmenu=$htmlmenu.'<li><a href="'.$menuentry[type].'">'.$menuentry[name].'</a></li>';
 			}
 		}
