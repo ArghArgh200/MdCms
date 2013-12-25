@@ -16,13 +16,14 @@ $menu = json_decode(file_get_contents("md/settings.json"),true);
 function generateMenu($menu){ 
 //Generates the menu of pages.
 	global $menu;
-	global $main_directory;
 	$htmlmenu=''; //Set an empty variable so we can add thigns to it.
 	foreach ($menu as $menuentry){  // iterate through each menu's entry
 		if ($menuentry[type] == "md" ){ //If it's an MD, link to it.
 			$htmlmenu=$htmlmenu.'<li><a href="/?page='.$menuentry[id].'">'.$menuentry[name].'</a></li>';
-		}else{ // if it's not, use a link instead.
-			$htmlmenu=$htmlmenu.'<li><a href="'.$menuentry[type].'">'.$menuentry[name].'</a></li>';
+		}else{ // if it's not, use a link instead. Check for the site name though!
+			if ($menuentry[type] != $menu[sitename]){
+				$htmlmenu=$htmlmenu.'<li><a href="'.$menuentry[type].'">'.$menuentry[name].'</a></li>';
+			}
 		}
 	}
 	return $htmlmenu;
