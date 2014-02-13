@@ -15,14 +15,13 @@ use \Michelf\Markdown;
 $menu = json_decode(file_get_contents("md/settings.json"),true);
 function generateMenu($menu){ 
 //Generates the menu of pages.
-	global $menu;
 	$htmlmenu=''; //Set an empty variable so we can add thigns to it.
 	foreach ($menu as $menuentry){  // iterate through each menu's entry
-		if ($menuentry[type] == "md" ){ //If it's an MD, link to it.
-			$htmlmenu=$htmlmenu.'<li><a href="/?page='.$menuentry[id].'">'.$menuentry[name].'</a></li>';
+		if (is_array($menuentry) && $menuentry['type'] == "md" ){ //If it's an MD, link to it.
+			$htmlmenu=$htmlmenu.'<li><a href="/?page='.$menuentry['id'].'">'.$menuentry['name'].'</a></li>';
 		}else{ // if it's not, use a link instead. Check for the site name though!
-			if ($menuentry[type] != $menu[sitename][0]){
-				$htmlmenu=$htmlmenu.'<li><a href="'.$menuentry[type].'">'.$menuentry[name].'</a></li>';
+			if (is_array($menuentry) && $menuentry['type'] != $menu['sitename'][0]){
+				$htmlmenu=$htmlmenu.'<li><a href="'.$menuentry['type'].'">'.$menuentry['name'].'</a></li>';
 			}
 		}
 	}
@@ -64,7 +63,7 @@ function generatePage($htmlmenu,$html) { //Actually makes the page, and bootstra
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>' .$menu[sitename]. '</title>
+<title>' .$menu['sitename']. '</title>
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
 <style>body { padding-top: 50px; } .mainbody { padding: 40px 15px; text-align: center; }</style>
 </head>
@@ -80,7 +79,7 @@ function generatePage($htmlmenu,$html) { //Actually makes the page, and bootstra
 <span class="icon-bar">
 </span>
 </button>
-<a class="navbar-brand" href="/">'.$menu[sitename].'</a>
+<a class="navbar-brand" href="/">'.$menu['sitename'].'</a>
 </div>
 <div class="collapse navbar-collapse">
 <ul class="nav navbar-nav">
