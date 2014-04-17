@@ -14,9 +14,11 @@
 // Helpful JSON syntax hints: the last entry in an array will not have a comma after it. The others will.
 
 // End configuration. Don't touch anything below this line unless you know what you're doing.
+
 spl_autoload_register(function($class) {
 		require preg_replace('{\\\\|_(?!.*\\\\)}', DIRECTORY_SEPARATOR, "php-markdown/".ltrim($class, '\\')).'.php'; //Seriously, though. This is the dumbest way to load a class I've ever seen. And I've seen some shit.
 	});
+
 use \Michelf\Markdown;
 
 $menu = json_decode(file_get_contents("md/settings.json"), true);
@@ -24,8 +26,8 @@ $menu = json_decode(file_get_contents("md/settings.json"), true);
 
 /**
  *
- * @param unknown $menu
- * @return unknown
+ * @param string $menu
+ * @return string
  */
 function generateMenu($menu) {
 	//Generates the menu of pages.
@@ -45,7 +47,7 @@ function generateMenu($menu) {
 
 /**
  *
- * @return unknown
+ * @return string
  */
 function pickPage() { //Checks for the 'page' GET variable, and if the apge it specifies exists, grab the file. If it doesnt, get a 404 page. If it's not set, show the index.md page.
 	global $main_directory;
@@ -66,7 +68,7 @@ function pickPage() { //Checks for the 'page' GET variable, and if the apge it s
 
 /**
  *
- * @return unknown
+ * @return string
  */
 function generateBody() {
 	global $menu;
@@ -81,63 +83,78 @@ function generateBody() {
 
 /**
  *
- * @param unknown $htmlmenu
- * @param unknown $html
- * @return unknown
+ * @param string $htmlmenu
+ * @param string $html
+ * @return string
  */
-function generatePage($htmlmenu, $html) { //Actually makes the page, and bootstraps it.
-	global $menu;
-	global $main_directory;
-	// cue ugly lines of bad HTML embedding and whatever. Sorry, HTML devs. Best I could make it look.
-	$htmldoc='<!DOCTYPE html>
+function render($params) { //Actually makes the page, and bootstraps it.
+
+	// Make variables available in 'template'.
+	foreach ($params as $name => $param) {
+		$varName = "tplvar_{$name}";
+		$$varName = $param;
+	}
+
+	return <<<'EOT'
+<!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>' .$menu['sitename']. '</title>
-<link href="/resources/bootstrap.css" rel="stylesheet">
-<style>body{padding-top: 50px;background-color: transparent;} .mainbody{padding: 40px 15px;text-align: center;background-color: transparent;}</style>
-<link href="/style.css" rel="stylesheet">
-</head>
-<body>
-<div class="navbar navbar-default navbar-fixed-top">
-<div class="container">
-<div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-<span class="icon-bar">
-</span>
-<span class="icon-bar">
-</span>
-<span class="icon-bar">
-</span>
-</button>
-<a class="navbar-brand" href="/">'.$menu['sitename'].'</a>
-</div>
-<div class="collapse navbar-collapse">
-<ul class="nav navbar-nav">
-'.$htmlmenu.'
-</div>
-<!--/.nav-collapse -->
-</div>
-</div>
-<div class="container">
-<div class="mainbody">
-<div align="left">
-'.$html.'
-</div>
-</div>
-<script src="resources/jquery.js"></script>
-<script src="resources/bootstrap.js"></script>
-</body>
-</html>';
-	return $htmldoc;
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>{$tplvar_sitename}</title>
+		<link href="/resources/bootstrap.css" rel="stylesheet">
+		<style>
+			body {
+				padding-top: 50px;
+				background-color: transparent;
+			}
+			.mainbody {
+				padding: 40px 15px;
+				text-align: center;
+				background-color: transparent;
+			}
+		</style>
+		<link href="/style.css" rel="stylesheet">
+	</head>
+	<body>
+		<div class="navbar navbar-default navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						<span class="icon-bar">
+						</span>
+						<span class="icon-bar">
+						</span>
+						<span class="icon-bar">
+						</span>
+					</button>
+					<a class="navbar-brand" href="/">{$tplvar_sitename}</a>
+				</div>
+				<div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav">
+						{$tplvar_menu}
+					</ul>
+				</div>
+				<!--/.nav-collapse -->
+			</div>
+		</div>
+		<div class="container">
+			<div class="mainbody">
+				<div align="left">
+					{$tplvar_pagecontent}
+				</div>
+			</div>
+		</div>
+		<script src="resources/jquery.js"></script>
+		<script src="resources/bootstrap.js"></script>
+	</body>
+</html>
+EOT;
 }
 
+$params = array();
+$params['sitename'] = $menu['sitename'];
+$params['menu'] = generateMenu($menu);
+$params['pagecontent'] = generateBody();
 
-//Hardcoded menu entries are OK. Look where it says '.$menu.' and after that, preferably on a new line, add <li><a href="http://example.com">Your Link</a></li>. Probably better to use the JSON or variables though.
-//<a class="navbar-brand" href="/">Example Page</a>  This is the big button that sits on the left, and is basically your webpage's title.
-
-$htmlmenu=generateMenu($menu); //Generate menu and store it in a variable
-$htmlbody=generateBody(); // grab md and convert it to HTML, storing it in a variable.
-$htmlpage=generatePage($htmlmenu, $htmlbody); // Take menu and body vars and stick them in the HTML
-echo $htmlpage; //Print the page. Shiny.
+die(render($params));
