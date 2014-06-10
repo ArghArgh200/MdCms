@@ -1,1 +1,6 @@
-{"sitename":"My Awesome Markdown Site","example":{"name":"Example Page","id":"example","type":"md"},"examplelink":{"name":"Some Site","id":"examplelink","type":"http:\/\/othersite.example.com\/"}}
+{
+"sitename":"My Awesome Markdown Site",
+"example":{"name":"Example Page","id":"example","type":"md"},
+"dynamicexample":{"name":"Example PHP-generated Page","id":"dynamicexample","type":"php"},
+"examplelink":{"name":"Some Site","id":"examplelink","type":"http:\/\/othersite.example.com\/"}
+}

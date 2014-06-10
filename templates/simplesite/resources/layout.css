@@ -1,0 +1,28 @@
+body {
+	position: relative;
+	min-width: 600px;
+}
+
+#navigation{
+	display: block;
+	float: left;
+	width: 12em;
+}
+
+
+#navText{
+	text-align: center;
+}
+
+footer{
+	clear: left;
+}
+footer>p{
+	padding:0px;
+	margin:0px;
+}
+
+#content {
+	margin-left: 12em;
+	padding-left: 3em;
+}

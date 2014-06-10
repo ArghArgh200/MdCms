@@ -12,12 +12,13 @@
 // Configuration
 // Open up md/settings.json, and edit that. Make sure your syntax is correct or the site WILL crash!
 // Helpful JSON syntax hints: the last entry in an array will not have a comma after it. The others will.
+// Now, copy the contents of one of the template folders to the same directory as this file.
 
-// End configuration. Don't touch anything below this line unless you know what you're doing.
+// End configuration. Don't touch anything below this line unless you know what you're doing, but then I probably shouldn't touch it.
 
 spl_autoload_register(function($class) {
-		require preg_replace('{\\\\|_(?!.*\\\\)}', DIRECTORY_SEPARATOR, "php-markdown/".ltrim($class, '\\')).'.php'; //Seriously, though. This is the dumbest way to load a class I've ever seen. And I've seen some shit.
-	});
+		require preg_replace('{\\\\|_(?!.*\\\\)}', DIRECTORY_SEPARATOR, "../php-markdown/".ltrim($class, '\\')).'.php'; // who does this
+});
 
 use \Michelf\Markdown;
 
@@ -49,35 +50,26 @@ function generateMenu($menu) {
  *
  * @return string
  */
-function pickPage() { //Checks for the 'page' GET variable, and if the apge it specifies exists, grab the file. If it doesnt, get a 404 page. If it's not set, show the index.md page.
+function generateBody() { // grabs and HTML-ifies the specified (or default) MD, or runs a PHP file, or displays a 404 error message.
 	global $main_directory;
 	global $menu;
 	if (!isset($_GET['page'])) { //Varaible not set? show index page.
+		$parser=new Markdown;
 		$text=file_get_contents("md/index.md");
-	}else { //variable IS set, attempt to show corresponding page.
+		$text=$parser->defaultTransform($text);
+	}else { //variable IS set, look for a static markdown file to render.
 		$request=filter_var($_GET['page'], FILTER_SANITIZE_STRING, FILTER_SANITIZE_SPECIAL_CHARS);
 		$text=file_get_contents("md/".$request.".md");
 		if ($text === FALSE) {
-			$text="404 Not Found.
-========";
+			//try looking for a PHP page.
+			$text=include_once("md/php/".$request.".php");
+			if ($text === FALSE) {$text="<h1 color='red'>404 - Page Not Found.";}
+		}else{ //we have a markdown page, translate it.
+			$parser=new Markdown;
+			$text = $parser->defaultTransform($text);
 		}
 	}
-	return $text; //returns the md's contents (or the index, or a 404 message), ready for parsing.
-}
-
-
-/**
- *
- * @return string
- */
-function generateBody() {
-	global $menu;
-	global $main_directory;
-	// Actually translate the .md to HTML.
-	$text = pickPage();
-	$parser=new Markdown;
-	$html = $parser->defaultTransform($text);
-	return $html;
+	return $text; //returns the md's HTML-ified contents, a 404, or the index markdown, or a PHP script's HTML output, ready for embedding with the template.
 }
 
 
@@ -87,74 +79,25 @@ function generateBody() {
  * @param string $html
  * @return string
  */
-function render($params) { //Actually makes the page, and bootstraps it.
+function render($params) { //Actually makes the page, and adds the template.
 
 	// Make variables available in 'template'.
 	foreach ($params as $name => $param) {
 		$varName = "tplvar_{$name}";
 		$$varName = $param;
 	}
-
-	return <<<'EOT'
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>{$tplvar_sitename}</title>
-		<link href="/resources/bootstrap.css" rel="stylesheet">
-		<style>
-			body {
-				padding-top: 50px;
-				background-color: transparent;
-			}
-			.mainbody {
-				padding: 40px 15px;
-				text-align: center;
-				background-color: transparent;
-			}
-		</style>
-		<link href="/style.css" rel="stylesheet">
-	</head>
-	<body>
-		<div class="navbar navbar-default navbar-fixed-top">
-			<div class="container">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-						<span class="icon-bar">
-						</span>
-						<span class="icon-bar">
-						</span>
-						<span class="icon-bar">
-						</span>
-					</button>
-					<a class="navbar-brand" href="/">{$tplvar_sitename}</a>
-				</div>
-				<div class="collapse navbar-collapse">
-					<ul class="nav navbar-nav">
-						{$tplvar_menu}
-					</ul>
-				</div>
-				<!--/.nav-collapse -->
-			</div>
-		</div>
-		<div class="container">
-			<div class="mainbody">
-				<div align="left">
-					{$tplvar_pagecontent}
-				</div>
-			</div>
-		</div>
-		<script src="resources/jquery.js"></script>
-		<script src="resources/bootstrap.js"></script>
-	</body>
-</html>
-EOT;
+	
+	$template = file_get_contents("template.html");
+	if ($template === FALSE ){die("<h1 color=red>ERROR: Site administrator has not set a page template. Consult MdCms's documentation for more.</h1>");}
+	$template=str_replace("MDCMS_SITENAME",$tplvar_sitename,$template);
+	$template=str_replace("MDCMS_MENU",$tplvar_menu,$template);
+	$template=str_replace("MDCMS_CONTENT",$tplvar_content,$template);
+	return $template;
 }
 
 $params = array();
 $params['sitename'] = $menu['sitename'];
 $params['menu'] = generateMenu($menu);
-$params['pagecontent'] = generateBody();
+$params['content'] = generateBody();
 
 die(render($params));
