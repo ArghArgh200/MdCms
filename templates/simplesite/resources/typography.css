@@ -2,30 +2,31 @@ html {
 	font-family: "Arial", sans-serif;
 	font-size: 14px;
 	padding: 5px;
-	color: #004;
-	background-color: #669;
+	color: #420;
+	background-color: #999;
 }
 
 h1,h2,h3,h4,h5{
 	font-family: "Verdana", sans-serif;
 }
 
-header>h5{
-	text-align: right;
+header>h1{
+	text-align: left;
+	font-size: 5em;
 }
 
 a{
-	color: #00d;
+	color: #fd0;
 	text-decoration: none;
 }
 
 a:visited{
-	color: #00e;
+	color: #dd0;
 	text-decoration: none;
 }
 
 a:hover,a:focus{
-	color: #0ff;
+	color: #ff0;
 }
 header{
 	padding-left: 6px;
@@ -33,9 +34,9 @@ header{
 	font-size:1.2em;
 	text-align:center;
 	padding: 3px;
-	border: 2px solid #00d;
+	border: 2px solid #fd0;
 	border-radius: 4px;
-	background-color: #556;
+	background-color: #666;
 }
 
 header>h5 {
@@ -46,7 +47,7 @@ footer {
 	background-color: #bbd;
 	text-align: center;
 	padding: 6px;
-	border: 2px solid #00d;
+	border: 2px solid #fd0;
 	border-radius: 4px;
 }
 
@@ -54,14 +55,14 @@ footer {
 	padding:6px;
 	padding-left:10px;
 	padding-right:10px;
-	background-color: #778;
-	border-left: 2px solid #00d;
-	border-right: 2px solid #00d;
+	background-color: #888;
+	border-left: 2px solid #fd0;
+	border-right: 2px solid #fd0;
 	border-radius: 4px;
 }
 
 #navigation {
-	border-bottom: 2px solid #00d;
+	border-bottom: 2px solid #fd0;
 }
 
 #navigation>li{
@@ -73,6 +74,14 @@ footer {
 	padding-right:18px;
 }
 
+label label-success{
+	color: #0f0;
+}
+label label-danger{
+	color: #f00;
+}
+
+
 tbody>tr:nth-child(odd)>td, tbody>tr:nth-child(odd)>th {
-	background-color: #667;
+	background-color: #777;
 }
