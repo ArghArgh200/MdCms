@@ -2,8 +2,15 @@ html {
 	font-family: "Arial", sans-serif;
 	font-size: 14px;
 	padding: 5px;
-	color: #420;
+	color: #000;
 	background-color: #999;
+}
+
+.label-success{
+	color: #0f0;
+}
+.label-danger{
+	color: #f00;
 }
 
 h1,h2,h3,h4,h5{
@@ -12,21 +19,27 @@ h1,h2,h3,h4,h5{
 
 header>h1{
 	text-align: left;
-	font-size: 5em;
+	font-size: 3em;
+	padding: 10px;
+	margin: 5px;
+	border: 3px solid #00d;
+	border-radius: 6px;
+	display:inline;
+	background-color:#666;
 }
 
 a{
-	color: #fd0;
+	color: #00d;
 	text-decoration: none;
 }
 
 a:visited{
-	color: #dd0;
+	color: #009;
 	text-decoration: none;
 }
 
 a:hover,a:focus{
-	color: #ff0;
+	color: #0fd;
 }
 header{
 	padding-left: 6px;
@@ -34,20 +47,16 @@ header{
 	font-size:1.2em;
 	text-align:center;
 	padding: 3px;
-	border: 2px solid #fd0;
+	border: 2px solid #00d;
 	border-radius: 4px;
 	background-color: #666;
 }
 
-header>h5 {
-	text-align:right;
-}
-
 footer {
-	background-color: #bbd;
+	background-color: #666;
 	text-align: center;
 	padding: 6px;
-	border: 2px solid #fd0;
+	border: 2px solid #00d;
 	border-radius: 4px;
 }
 
@@ -56,13 +65,14 @@ footer {
 	padding-left:10px;
 	padding-right:10px;
 	background-color: #888;
-	border-left: 2px solid #fd0;
-	border-right: 2px solid #fd0;
+	border-right: 2px solid #00d;
+	border-left: 2px solid #00d;
 	border-radius: 4px;
 }
 
 #navigation {
-	border-bottom: 2px solid #fd0;
+	border-bottom: 2px solid #00d;
+	border-top: 2px solid #00d;
 }
 
 #navigation>li{
@@ -73,14 +83,6 @@ footer {
 	padding-left:18px;
 	padding-right:18px;
 }
-
-.label .label-success{
-	color: #0f0;
-}
-.label .label-danger{
-	color: #f00;
-}
-
 
 tbody>tr:nth-child(odd)>td, tbody>tr:nth-child(odd)>th {
 	background-color: #777;
