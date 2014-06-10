@@ -24,8 +24,8 @@ Then finally, move your desired template's folder contents to the same directory
 
 Adding Content
 ----------------
-Just put Markdown pages into md/. MdCms will do the rest. Add menu entries as described in the Configuration section
-For PHP-generated stuff, make or adapt a script to return HTML when executed, and put it in md/php/. It cannot share a file name with anything in md/
+Just put Markdown pages into md/. MdCms will do the rest. Add menu entries as described in the Configuration section.
+ For PHP-generated stuff, make or adapt a script to return HTML when executed, and put it in md/php/. It cannot share a file name with anything in md/ 
 (Example: md/test.md will be rendered instead of md/php/test.php)
 
 Uses Michel Fortin's PHP Markdown parser.
