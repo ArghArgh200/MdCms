@@ -7,17 +7,15 @@
 
 
 // MdCms by Arghlex - Credits to John Gruber and Michel Fortin for their Markdown translators
-// Lines of confusing HTML and PHP by Arghlex
+//  and the Bootstrap and jQuery project teams for also being awesome at their jobs/free-time development. 
+
+// Lines of confusing HTML and PHP by Arghlex M.
 
 // Configuration
-// Open up md/settings.json, and edit that. Make sure your syntax is correct or the site WILL crash!
-// Helpful JSON syntax hints: the last entry in an array will not have a comma after it. The others will.
-// Now, copy the contents of one of the template folders to the same directory as this file.
-
-// End configuration. Don't touch anything below this line unless you know what you're doing, but then I probably shouldn't touch it.
+// See README.md, it'll make more sense in its own document.
 
 spl_autoload_register(function($class) {
-		require preg_replace('{\\\\|_(?!.*\\\\)}', DIRECTORY_SEPARATOR, "../php-markdown/".ltrim($class, '\\')).'.php'; // who does this
+		require preg_replace('{\\\\|_(?!.*\\\\)}', DIRECTORY_SEPARATOR, "php-markdown/".ltrim($class, '\\')).'.php'; // who does this
 });
 
 use \Michelf\Markdown;
