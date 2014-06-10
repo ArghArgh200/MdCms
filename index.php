@@ -64,8 +64,8 @@ function render() {
 	//make sure we HAVE a template
 	if ($template === FALSE ){die("<h1 color=red>ERROR: Site administrator has not set a page template. Consult MdCms's documentation for more.</h1>");}
 	$template=str_replace("MDCMS_SITENAME",$menu['sitename'],$template);  //replace the parts of the site that need it
-	$template=str_replace("MDCMS_MENU",generateMenu($menu);,$template);
-	$template=str_replace("MDCMS_CONTENT",generateBody();,$template);
+	$template=str_replace("MDCMS_MENU",generateMenu($menu),$template);
+	$template=str_replace("MDCMS_CONTENT",generateBody(),$template);
 	return $template;
 }
 
