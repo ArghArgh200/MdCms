@@ -74,10 +74,10 @@ footer {
 	padding-right:18px;
 }
 
-label label-success{
+.label .label-success{
 	color: #0f0;
 }
-label label-danger{
+.label .label-danger{
 	color: #f00;
 }
 
