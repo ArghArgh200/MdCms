@@ -12,9 +12,12 @@ First, edit settings.json:
 	{
 	"sitename":"My Awesome Markdown Site",  // This is the site's name.
 	//These next entries are the three types of menu entries you can have.
-	"example":{"name":"Example Page","id":"example","type":"md"},  // Loads and translates a markdown page from ./md/example.md
-	"dynamicexample":{"name":"Example PHP-generated Page","id":"dynamicexample","type":"php"}, //runs a PHP script and returns its HTML contents
-	"examplelink":{"name":"Some Site","id":"examplelink","type":"http:\/\/othersite.example.com\/"} // directly links someone to the link specified in 'type'
+	"example":{"name":"Example Page","id":"example","type":"md"},
+	// Loads and translates a markdown page from ./md/example.md
+	"dynamicexample":{"name":"Example PHP-generated Page","id":"dynamicexample","type":"php"},
+	// Runs a PHP script and returns its HTML contents
+	"examplelink":{"name":"Some Site","id":"examplelink","type":"http:\/\/othersite.example.com\/"} 
+	// Directly links someone to the link specified in 'type'
 	}
 
 Then finally, move your desired template's folder contents to the same directory as md/ and index.php.
