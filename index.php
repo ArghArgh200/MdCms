@@ -59,15 +59,16 @@ function generateBody() {
 }
 
 //Actually renders the page
-function render() {
+function render($menu,$menuhtml,$bodyhtml) {
 	$template = file_get_contents("template.html"); //load our template
 	//make sure we HAVE a template
 	if ($template === FALSE ){die("<h1 color=red>ERROR: Site administrator has not set a page template. Consult MdCms's documentation for more.</h1>");}
 	$template=str_replace("MDCMS_SITENAME",$menu['sitename'],$template);  //replace the parts of the site that need it
-	$template=str_replace("MDCMS_MENU",generateMenu($menu),$template);
-	$template=str_replace("MDCMS_CONTENT",generateBody(),$template);
+	$template=str_replace("MDCMS_MENU",$menuhtml,$template);
+	$template=str_replace("MDCMS_CONTENT",$bodyhtml,$template);
 	return $template;
 }
-
-die(render());
+$bodyhtml=generateBody();
+$menuhtml=generateMenu($menu);
+die(render($menu,$menuhtml,$bodyhtml));
 ?>
