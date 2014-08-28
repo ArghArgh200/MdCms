@@ -35,9 +35,7 @@ function generateMenu($menu) {
 		if (is_array($menuentry)) {
 			if ($menuentry['type'] == "php" || $menuentry['type'] == "md" ) { //If it's an MD or PHP script, link to it.
 				$htmlmenu=$htmlmenu.'<li><a href="/?page='.$menuentry['id'].'">'.$menuentry['name'].'</a></li>';
-			}
-		}else { // if it's not, use a link instead. make sure we don't try and put the sitename variable into the list, because that would be dumb.
-			if (is_array($menuentry) && $menuentry['type'] != $menu['sitename'][0]) {
+			}else {
 				$htmlmenu=$htmlmenu.'<li><a href="'.$menuentry['type'].'">'.$menuentry['name'].'</a></li>';
 			}
 		}
@@ -61,7 +59,7 @@ function generateBody() {
 	}else { //User is requesting a page.
 		$request=filter_var($_GET['page'], FILTER_SANITIZE_STRING, FILTER_SANITIZE_SPECIAL_CHARS);
 		// Sanitization of things to prevent people stealing files they shouldn't or things like that
-		$text=file_get_contents("md/".$request.".md");
+		$text=@file_get_contents("md/".$request.".md");
 		if ($text === FALSE) {
 			// No .md found, look for a PHP script with the same name.
 			$text=include_once "md/php/".$request.".php";
@@ -88,7 +86,7 @@ function render($menu, $menuhtml, $bodyhtml) {
 	$template = file_get_contents("template.html"); //load our template
 	//make sure we HAVE a template
 	if ($template === FALSE ) {die("<h1 color=red>ERROR: Site administrator has not set a page template. Consult MdCms's documentation for more.</h1>");}
-	$template=str_replace("MDCMS_SITENAME", $menu['sitename'], $template);  //replace the parts of the site that need it
+	$template=str_replace("MDCMS_SITENAME", file_get_contents("sitename.txt"), $template);  //replace the parts of the site that need it
 	$template=str_replace("MDCMS_MENU", $menuhtml, $template);
 	$template=str_replace("MDCMS_CONTENT", $bodyhtml, $template);
 	return $template;
