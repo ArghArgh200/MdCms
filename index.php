@@ -28,7 +28,7 @@ use \Michelf\Markdown;
  * @param unknown $menu
  * @return unknown
  */
-function generateMenu($menu) {
+function generateMenu() {
 	$menu = json_decode(file_get_contents("md/settings.json"), true);
 	$htmlmenu=''; //Set an empty variable so we can add things to it.
 	foreach ($menu as $menuentry) {  // iterate through each menu's entry
