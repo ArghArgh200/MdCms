@@ -35,11 +35,11 @@ function generateMenu($menu) {
 		if (is_array($menuentry)) {
 			if ($menuentry['type'] == "php" || $menuentry['type'] == "md" ) { //If it's an MD or PHP script, link to it.
 				global $request
-				if ($request!=NULL){ if ($request=$menuentry['id']){
+				if ($request!=NULL){ if($request=$menuentry['id']){
 					$htmlmenu=$htmlmenu.'<li><a href="/?page='.$menuentry['id'].'">'.$menuentry['name'].'</a></li>';
 				}else{
 					$htmlmenu=$htmlmenu.'<li><a href="/?page='.$menuentry['id'].'">'.$menuentry['name'].'</a></li>';
-				}
+				} }
 			}else { // Must be a link to something. Embed it.
 				$htmlmenu=$htmlmenu.'<li><a href="'.$menuentry['type'].'">'.$menuentry['name'].'</a></li>';
 			}
