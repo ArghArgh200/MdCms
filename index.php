@@ -58,7 +58,7 @@ function generateMenu($menu) {
  */
 function generateBody() {
 	global $main_directory;
-	global $request = NULL; //we'll be using this in the menu function
+	global $request; //we'll be using this in the menu function
 	if (!isset($_GET['page'])) { //Is the user even requesting a specific page?
 		$parser=new Markdown;
 		$text=file_get_contents("md/index.md");
