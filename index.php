@@ -20,7 +20,6 @@ spl_autoload_register(function($class) {
 
 use \Michelf\Markdown;
 
-$menu = json_decode(file_get_contents("md/settings.json"), true);
 
 
 /**
@@ -30,19 +29,22 @@ $menu = json_decode(file_get_contents("md/settings.json"), true);
  * @return unknown
  */
 function generateMenu($menu) {
+	$menu = json_decode(file_get_contents("md/settings.json"), true);
 	$htmlmenu=''; //Set an empty variable so we can add things to it.
 	foreach ($menu as $menuentry) {  // iterate through each menu's entry
-		if ($menuentry['type'] == "php" || $menuentry['type'] == "md" ) { //If it's an MD or PHP script, link to it.
-			global $request;
-			if ($request!=NULL){
-				if($request==$menuentry['id']){
-					$htmlmenu=$htmlmenu.'<li><a href="/?page='.$menuentry['id'].'">'.$menuentry['name'].'</a></li>';
-				}else{
-					$htmlmenu=$htmlmenu.'<li class=active><a href="/?page='.$menuentry['id'].'">'.$menuentry['name'].'</a></li>';
+		if (is_array($menuentry)){
+			if ($menuentry['type'] == "php" || $menuentry['type'] == "md" ) { //If it's an MD or PHP script, link to it.
+				global $request;
+				if ($request!=NULL){
+					if($request==$menuentry['id']){
+						$htmlmenu=$htmlmenu.'<li><a href="/?page='.$menuentry['id'].'">'.$menuentry['name'].'</a></li>';
+					}else{
+						$htmlmenu=$htmlmenu.'<li class=active><a href="/?page='.$menuentry['id'].'">'.$menuentry['name'].'</a></li>';
+					}
 				}
+			} else { // Must be a link to something. Embed it.
+				$htmlmenu=$htmlmenu.'<li><a href="'.$menuentry['type'].'">'.$menuentry['name'].'</a></li>';
 			}
-		} else { // Must be a link to something. Embed it.
-			$htmlmenu=$htmlmenu.'<li><a href="'.$menuentry['type'].'">'.$menuentry['name'].'</a></li>';
 		}
 	}
 	return $htmlmenu;
