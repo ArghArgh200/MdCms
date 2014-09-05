@@ -34,8 +34,13 @@ function generateMenu($menu) {
 	foreach ($menu as $menuentry) {  // iterate through each menu's entry
 		if (is_array($menuentry)) {
 			if ($menuentry['type'] == "php" || $menuentry['type'] == "md" ) { //If it's an MD or PHP script, link to it.
-				$htmlmenu=$htmlmenu.'<li><a href="/?page='.$menuentry['id'].'">'.$menuentry['name'].'</a></li>';
-			}else {
+				global $request
+				if ($request!=NULL){ if ($request=$menuentry['id']){
+					$htmlmenu=$htmlmenu.'<li><a href="/?page='.$menuentry['id'].'">'.$menuentry['name'].'</a></li>';
+				}else{
+					$htmlmenu=$htmlmenu.'<li><a href="/?page='.$menuentry['id'].'">'.$menuentry['name'].'</a></li>';
+				}
+			}else { // Must be a link to something. Embed it.
 				$htmlmenu=$htmlmenu.'<li><a href="'.$menuentry['type'].'">'.$menuentry['name'].'</a></li>';
 			}
 		}
@@ -51,7 +56,7 @@ function generateMenu($menu) {
  */
 function generateBody() {
 	global $main_directory;
-	global $menu;
+	global $request = NULL; //we'll be using this in the menu function
 	if (!isset($_GET['page'])) { //Is the user even requesting a specific page?
 		$parser=new Markdown;
 		$text=file_get_contents("md/index.md");
@@ -82,7 +87,7 @@ function generateBody() {
  * @param unknown $bodyhtml
  * @return unknown
  */
-function render($menu, $menuhtml, $bodyhtml) {
+function render($menuhtml, $bodyhtml) {
 	$template = file_get_contents("template.html"); //load our template
 	//make sure we HAVE a template
 	if ($template === FALSE ) {die("<h1 color=red>ERROR: Site administrator has not set a page template. Consult MdCms's documentation for more.</h1>");}
@@ -94,6 +99,6 @@ function render($menu, $menuhtml, $bodyhtml) {
 
 
 $bodyhtml=generateBody();
-$menuhtml=generateMenu($menu);
-die(render($menu, $menuhtml, $bodyhtml));
+$menuhtml=generateMenu($menu); //needs to happen in this order so don't change it
+die(render($menuhtml, $bodyhtml));
 ?>
