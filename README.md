@@ -1,14 +1,37 @@
-MdCms
-=====
+It Works! MdCms is functioning properly. Enjoy!
+============
 
-It's a Content Management System that uses Markdown to display the pages.
+What is it? It's a Content Management System that uses Markdown to display the pages.
  It's easily extensible and doesn't require you to have a web designer, rocket scientist or heart surgeon to do it for you.
  
 Cloning
 -----------
-Believe it or not, you'll need to clone it.
 
- 
+Believe it or not, you'll need to download it. You'll need a git client and basic CLI experience. 
+In the directory you want it, run:
+
+	git clone --recursive https://github.com/ArghArgh200/MdCms.git
+
+Now, instead of copying the files out of the folder they're dumped in, (MdCms/) try symlinking the parts with actual code:
+Linux and OSX (I think):
+
+	ln -s MdCms/index.php index.php
+	ln -s MdCms/php-markdown php-markdown
+	cp MdCms/sitename.txt sitename.txt
+	cp -rf MdCms/templates/<template of your choosing>/* .
+	cp -rf MdCms/md/
+	
+Windows:
+	
+	MKLINK index.php MdCms\index.php
+	MKLINK /D php-markdown MdCms\php-markdown
+	COPY MdCms\sitename.txt sitename.txt
+	COPY MdCms\templates\<template of your choosing>\template.html
+	COPY MdCms\templates\<template if you use the 'simple site' template>\resources
+	COPY MdCms\md\
+
+This, come update time, should keep you from having to re-copy the main PHP code file, or deal with possibly overwriting your data by mistake.
+
 Configuration
 -----------
 First, edit settings.json:
@@ -27,7 +50,8 @@ First, edit settings.json:
 Then finally, move your desired template's folder contents to the same directory as md/ and index.php.
 Keep in mind, not all the pages need to be listed in the file to be accessible.
 
-Second, you'll have to set a site name. That's as simple as creating a text file 'sitename.txt' in the same directory, with the site's name in it.
+Second, you'll have to set a site name.
+That's as simple as creating a text file 'sitename.txt' in the same directory, with the site's name in it. (You can even embed HTML into it!)
 
 That's it! You're done with the setup! Now for content.
 
@@ -45,3 +69,11 @@ Bring it to me on IRC.
 
 irc.stormbit.net #stormbit, Ask for DJ_Arghlex
 -----
+
+
+**Many thanks to:**
+
+[John "Daring Fireball" Gruber](<http://daringfireball.net/projects/markdown/>)
+
+[Michel F.](<http://michelf.ca/projects/php-markdown/>)
+
