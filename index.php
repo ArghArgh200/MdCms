@@ -99,6 +99,6 @@ function render($menuhtml, $bodyhtml) {
 
 
 $bodyhtml=generateBody();
-$menuhtml=generateMenu($menu); //needs to happen in this order so don't change it
+$menuhtml=generateMenu(); //needs to happen in this order so don't change it
 die(render($menuhtml, $bodyhtml));
 ?>
