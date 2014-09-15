@@ -56,7 +56,7 @@ function blogMain() {
 			$blogsettings["name"]=htmlspecialchars($_REQUEST["blogname"]);
 			$blogsettings["comment"]=htmlspecialchars($_REQUEST["blogcomment"]);
 			@file_put_contents("md/blog/settings.json", json_encode($blogsettings));
-			@file_put_contents("md/blog/". number_format(floor(9223372036854772205-time()), 60,'','') .".md", "####".$_REQUEST["postname"]."\n\nPosted ".@date("r", $_REQUEST["posttime"])."\n\n".$_REQUEST["postcontents"]."\n\n");
+			@file_put_contents("md/blog/". number_format(99999999999-time(), 0,'','') .".md", "####".$_REQUEST["postname"]."\n\nPosted ".@date("r", $_REQUEST["posttime"])."\n\n".$_REQUEST["postcontents"]."\n\n");
 			$output='<script type="text/javascript">window.location="?page=blog";</script><a href="?page=blog">Posted!</a></script>';
 		} else { $output="<h4>You didn't specify a task for the blog lackey to complete!</h4>"; }
 	} else {
