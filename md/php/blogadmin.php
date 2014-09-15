@@ -32,8 +32,8 @@ function blogMain() {
 		} elseif ($_REQUEST["blogaction"]=="addpost" && $_REQUEST["user"] == $blogsettings["user"]) { //admin wants to post a post
 			$output='<h3>Add a new post!</h3><hr>
 			Post Title:<br><form action="?page=blogadmin" method="POST"><input type="textbox" name="postname" placeholder="Enter your post\'s title here!"><br>
-			Post Contents:<br><input type="textarea" name="postcontents" rows="15" cols="60" placeholder="Enter your post\'s contents here!"><br>
-			<input type="hidden" name="posttime" value="'.time().'"><br>
+			Post Contents:<br><textarea name="postcontents" rows="15" cols="60">Enter your post\'s contents here!</textarea><br>
+			<input type="hidden" name="posttime" value="'. time() .'"><br>
 			<input type="submit" value="Post!"><hr>
 			Blog Name:<br><input type="text" name="blogname" value="'.$blogsettings["name"].'"><br>
 			Blog Splash:<br><input type="text" name="blogcomment" value="'.$blogsettings["comment"].'"><br>
@@ -44,7 +44,7 @@ function blogMain() {
 			$blogsettings["name"]=htmlspecialchars($_REQUEST["blogname"]);
 			$blogsettings["comment"]=htmlspecialchars($_REQUEST["blogcomment"]);
 			file_put_contents("md/blog/settings.json",json_encode($blogsettings));
-			file_put_contents("md/blog/".$_REQUEST["posttime"].".md","####".$_REQUEST["postname"]."\n\nPosted ".@date("r",$_REQUEST["posttime"])."\n\n".$_REQUEST["postcontents"]."\n\n");
+			file_put_contents("md/blog/". number_format(floor(9223372036854772205-time()),0,null,'') .".md","####".$_REQUEST["postname"]."\n\nPosted ".@date("r",$_REQUEST["posttime"])."\n\n".$_REQUEST["postcontents"]."\n\n");
 				$output='<script type="text/javascript">window.location="?page=blog";</script><a href="?page=blog">Posted!</a></script>';
 		} else { $output="<h4>You didn't specify a task for the blog lackey to complete!</h4>"; }
 	} else {
