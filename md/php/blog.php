@@ -1,6 +1,14 @@
 <?php
-//MdCms Blog Module - part one of two.
-//this script grabs all the blog posts from MdCms's md/blog/*.md pages and displays them with their data. filenames will be in unixtime so that the program displays them in chronological order.
+/**
+ * md/php/blog.php
+ *
+ * @package default
+ *
+ * 
+ * 
+ * MdCms Blog Module - part one of two.
+ * this script grabs all the blog posts from MdCms's md/blog/*.md pages and displays them with their data. filenames will be in unixtime so that the program displays them in chronological order.
+ */
 
 //this again
 spl_autoload_register(function($class) {
@@ -8,7 +16,7 @@ spl_autoload_register(function($class) {
 	});
 use \Michelf\Markdown;
 $blogsettings=json_decode(file_get_contents("md/blog/settings.json"), true);
-if (!$blogsettings){die("Blog's not ready for users!");}else{
+if (!$blogsettings) {die("Blog's not ready for users!");}else {
 	$text="###".$blogsettings["name"]."\n\n####".$blogsettings["comment"]."\n\n<hr>\n\n";
 	//blog header in markdown
 	foreach (glob("md/blog/*.md") as $file) {
@@ -22,6 +30,6 @@ if (!$blogsettings){die("Blog's not ready for users!");}else{
 	$text = $parser->defaultTransform($text);
 	$text=$text.'<br><br><h5><a href="?page=blogadmin">Admin CP</a></h5>';
 	return $text;
-	
+
 }
 ?>

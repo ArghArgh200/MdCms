@@ -1,32 +1,44 @@
 <?php
-// MdCms Blog Module - part two of two
-// This is where the blog writer will post to the blog in markdown and edit settings. Protected using a very simple HTTP authorization system.
+/**
+ * md/php/blogadmin.php
+ *
+ * @package default
+ *
+ *
+ *
+ * MdCms Blog Module - part two of two
+ * This is where the blog writer will post to the blog in markdown and edit settings. Protected using a very simple HTTP authorization system.
+ *
+ * the first rendition of this is to get it working. Then I'll do all the splitting of everything into functions and making it all display after it's processed everything and done whatever.
+ */
 
-//the first rendition of this is to get it working. Then I'll do all the splitting of everything into functions and making it all display after it's processed everything and done whatever.
-
-//main backbone thing
+/**
+ * main backbone thing
+ *
+ * @return unknown
+ */
 function blogMain() {
 	$blogsettings=json_decode(@file_get_contents("md/blog/settings.json"), true);
-	if ($blogsettings===FALSE){
+	if ($blogsettings===FALSE) {
 		$blogsettings["name"]="MDCMS_SITENAME Blog";
 		$blogsettings["comment"]="An Example Blog powered by MdCms";
-		file_put_contents("md/blog/settings.json",json_encode($blogsettings));
+		@file_put_contents("md/blog/settings.json", json_encode($blogsettings));
 	}
-	if (isset($_REQUEST["blogaction"])){
-		if ($_REQUEST["blogaction"]=="login"){ //someone's feeding us login information
-			$attempt=hash("sha256",$_REQUEST["username"].$_REQUEST["password"]);
+	if (isset($_REQUEST["blogaction"])) {
+		if ($_REQUEST["blogaction"]=="login") { //someone's feeding us login information
+			$attempt=hash("sha256", $_REQUEST["username"].$_REQUEST["password"]);
 			if (isset($blogsettings["user"])) {
 				if ($blogsettings["user"] == $attempt) {
-					header("Location: ?page=blogadmin&blogaction=addpost&user=".$blogsettings["user"],true,301);
+					header("Location: ?page=blogadmin&blogaction=addpost&user=".$blogsettings["user"], true, 301);
 					$output='<script type="text/javascript">window.location="?page=blogadmin&blogaction=addpost&user='.$blogsettings["user"].'";</script><a href="?page=blogadmin&blogaction=addpost&user='.$blogsettings["user"].'">Continue.</a></script>';
-				}else{
+				}else {
 					$output='<h4>Login incorrect</h4>';
 				}
-			}else{
+			}else {
 				$blogsettings["user"]=$attempt;
 				$blogsettings["name"]="MDCMS_SITENAME Blog";
 				$blogsettings["comment"]="An Example Blog powered by MdCms";
-				file_put_contents("md/blog/settings.json",json_encode($blogsettings));
+				@file_put_contents("md/blog/settings.json", json_encode($blogsettings));
 				$output='<script type="text/javascript">window.location="?page=blogadmin&blogaction=addpost&user='.$blogsettings["user"].'";</script><a href="?page=blogadmin&blogaction=addpost&user='.$blogsettings["user"].'">Continue.</a></script>';
 			}
 		} elseif ($_REQUEST["blogaction"]=="addpost" && $_REQUEST["user"] == $blogsettings["user"]) { //admin wants to post a post
@@ -43,9 +55,9 @@ function blogMain() {
 		} elseif ($_REQUEST["blogaction"]=="dopost" && $_REQUEST["user"] == $blogsettings["user"]) { //admin is posting a post
 			$blogsettings["name"]=htmlspecialchars($_REQUEST["blogname"]);
 			$blogsettings["comment"]=htmlspecialchars($_REQUEST["blogcomment"]);
-			file_put_contents("md/blog/settings.json",json_encode($blogsettings));
-			file_put_contents("md/blog/". number_format(floor(9223372036854772205-time()),0,null,'') .".md","####".$_REQUEST["postname"]."\n\nPosted ".@date("r",$_REQUEST["posttime"])."\n\n".$_REQUEST["postcontents"]."\n\n");
-				$output='<script type="text/javascript">window.location="?page=blog";</script><a href="?page=blog">Posted!</a></script>';
+			@file_put_contents("md/blog/settings.json", json_encode($blogsettings));
+			@file_put_contents("md/blog/". number_format(floor(9223372036854772205-time()), 0, null, '') .".md", "####".$_REQUEST["postname"]."\n\nPosted ".@date("r", $_REQUEST["posttime"])."\n\n".$_REQUEST["postcontents"]."\n\n");
+			$output='<script type="text/javascript">window.location="?page=blog";</script><a href="?page=blog">Posted!</a></script>';
 		} else { $output="<h4>You didn't specify a task for the blog lackey to complete!</h4>"; }
 	} else {
 		$output='<h3>Login</h3><hr>
@@ -58,5 +70,7 @@ function blogMain() {
 	}
 	return $output;
 }
+
+
 $output=blogMain();
 return $output;

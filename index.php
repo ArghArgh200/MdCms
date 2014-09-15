@@ -3,16 +3,17 @@
  * index.php
  *
  * @package default
+ *
+ *
+ *
+ * MdCms by Arghlex - Credits to John Gruber and Michel Fortin for their Markdown translators
+ * and the Bootstrap and jQuery project teams for also being awesome at their jobs/free-time development.
+ *
+ * Lines of confusing HTML and PHP by Arghlex M.
+ *
+ * Configuration
+ * See README.md, it'll make more sense
  */
-
-
-// MdCms by Arghlex - Credits to John Gruber and Michel Fortin for their Markdown translators
-//  and the Bootstrap and jQuery project teams for also being awesome at their jobs/free-time development.
-
-// Lines of confusing HTML and PHP by Arghlex M.
-
-// Configuration
-// See README.md, it'll make more sense
 
 spl_autoload_register(function($class) {
 		require preg_replace('{\\\\|_(?!.*\\\\)}', DIRECTORY_SEPARATOR, "php-markdown/".ltrim($class, '\\')).'.php'; // who does this
@@ -29,15 +30,15 @@ use \Michelf\Markdown;
  * @return unknown
  */
 function generateMenu() {
-	$menu = json_decode(file_get_contents("md/settings.json"), true);
+	$menu = json_decode(@file_get_contents("md/settings.json"), true);
 	$htmlmenu=''; //Set an empty variable so we can add things to it.
 	foreach ($menu as $menuentry) {  // iterate through each menu's entry
-		if (is_array($menuentry)){
+		if (is_array($menuentry)) {
 			if ($menuentry['type'] == "php" || $menuentry['type'] == "md" ) { //If it's an MD or PHP script, link to it.
 				global $request;
-				if($request==$menuentry['id']){
+				if ($request==$menuentry['id']) {
 					$htmlmenu=$htmlmenu.'<li class=active><a href="/?page='.$menuentry['id'].'">'.$menuentry['name'].'</a></li>';
-				}else{
+				}else {
 					$htmlmenu=$htmlmenu.'<li><a href="/?page='.$menuentry['id'].'">'.$menuentry['name'].'</a></li>';
 				}
 			} else { // Must be a link to something. Embed it.
@@ -59,7 +60,7 @@ function generateBody() {
 	global $request; //we'll be using this in the menu function
 	if (!isset($_GET['page'])) { //Is the user even requesting a specific page?
 		$parser=new Markdown;
-		$text=file_get_contents("md/index.md");
+		$text=@file_get_contents("md/index.md");
 		$text=$parser->defaultTransform($text);
 	}else { //User is requesting a page.
 		$request=filter_var($_GET['page'], FILTER_SANITIZE_STRING, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -82,16 +83,15 @@ function generateBody() {
 /**
  * Actually renders the page
  *
- * @param unknown $menu
  * @param unknown $menuhtml
  * @param unknown $bodyhtml
  * @return unknown
  */
 function render($menuhtml, $bodyhtml) {
-	$template = file_get_contents("template.html"); //load our template
+	$template = @file_get_contents("template.html"); //load our template
 	//make sure we HAVE a template
 	if ($template === FALSE ) {die("<h1 color=red>ERROR: Site administrator has not set a page template. Consult MdCms's documentation for more.</h1>");}
-	$template=str_replace("MDCMS_SITENAME", file_get_contents("sitename.txt"), $template);  //replace the parts of the site that need it
+	$template=str_replace("MDCMS_SITENAME", @file_get_contents("sitename.txt"), $template);  //replace the parts of the site that need it
 	$template=str_replace("MDCMS_MENU", $menuhtml, $template);
 	$template=str_replace("MDCMS_CONTENT", $bodyhtml, $template);
 	return $template;
