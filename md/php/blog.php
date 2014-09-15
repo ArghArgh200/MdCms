@@ -9,7 +9,7 @@ spl_autoload_register(function($class) {
 use \Michelf\Markdown;
 $blogsettings=json_decode(file_get_contents("md/settings.json"), true);
 if (!$blogsettings){die("Blog's not ready for users!");}else{
-	$text="###".$blogsettings["name"]."\n\n####".$blogsettings["comment"]"\n\n"
+	$text="###".$blogsettings["name"]."\n\n####".$blogsettings["comment"]."\n\n";
 	//blog header in markdown
 	foreach (glob("md/blog/*.md") as $file) {
 		$text=$text."\n\n<pre>\n\n"; //separate them so it doesn't look like a giant post
