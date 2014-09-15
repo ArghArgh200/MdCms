@@ -18,11 +18,11 @@
  * @return unknown
  */
 function blogMain() {
-	$blogsettings=json_decode(@file_get_contents("md/blog/settings.json"), true);
+	$blogsettings=json_decode(@file_get_contents("md/blog/.settings.json"), true);
 	if ($blogsettings===FALSE) {
 		$blogsettings["name"]="MDCMS_SITENAME Blog";
 		$blogsettings["comment"]="An Example Blog powered by MdCms";
-		@file_put_contents("md/blog/settings.json", json_encode($blogsettings));
+		@file_put_contents("md/blog/.settings.json", json_encode($blogsettings));
 	}
 	if (isset($_REQUEST["blogaction"])) {
 		if ($_REQUEST["blogaction"]=="login") { //someone's feeding us login information
@@ -38,7 +38,7 @@ function blogMain() {
 				$blogsettings["user"]=$attempt;
 				$blogsettings["name"]="MDCMS_SITENAME Blog";
 				$blogsettings["comment"]="An Example Blog powered by MdCms";
-				@file_put_contents("md/blog/settings.json", json_encode($blogsettings));
+				@file_put_contents("md/blog/.settings.json", json_encode($blogsettings));
 				$output='<script type="text/javascript">window.location="?page=blogadmin&blogaction=addpost&user='.$blogsettings["user"].'";</script><a href="?page=blogadmin&blogaction=addpost&user='.$blogsettings["user"].'">Continue.</a></script>';
 			}
 		} elseif ($_REQUEST["blogaction"]=="addpost" && $_REQUEST["user"] == $blogsettings["user"]) { //admin wants to post a post
@@ -55,7 +55,7 @@ function blogMain() {
 		} elseif ($_REQUEST["blogaction"]=="dopost" && $_REQUEST["user"] == $blogsettings["user"]) { //admin is posting a post
 			$blogsettings["name"]=htmlspecialchars($_REQUEST["blogname"]);
 			$blogsettings["comment"]=htmlspecialchars($_REQUEST["blogcomment"]);
-			@file_put_contents("md/blog/settings.json", json_encode($blogsettings));
+			@file_put_contents("md/blog/.settings.json", json_encode($blogsettings));
 			@file_put_contents("md/blog/". number_format(99999999999-time(), 0,'','') .".md", "####".$_REQUEST["postname"]."\n\nPosted ".@date("r", $_REQUEST["posttime"])."\n\n".$_REQUEST["postcontents"]."\n\n");
 			$output='<script type="text/javascript">window.location="?page=blog";</script><a href="?page=blog">Posted!</a></script>';
 		} else { $output="<h4>You didn't specify a task for the blog lackey to complete!</h4>"; }

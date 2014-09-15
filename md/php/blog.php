@@ -15,7 +15,7 @@ spl_autoload_register(function($class) {
 		require preg_replace('{\\\\|_(?!.*\\\\)}', DIRECTORY_SEPARATOR, "php-markdown/".ltrim($class, '\\')).'.php';
 	});
 use \Michelf\Markdown;
-$blogsettings=json_decode(file_get_contents("md/blog/settings.json"), true);
+$blogsettings=json_decode(file_get_contents("md/blog/.settings.json"), true);
 if (!$blogsettings) {die("Blog's not ready for users!");}else {
 	$text="###".$blogsettings["name"]."\n\n####".$blogsettings["comment"]."\n\n<hr>\n\n";
 	//blog header in markdown
