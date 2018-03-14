@@ -19,7 +19,7 @@ spl_autoload_register(function($class) {
 		require preg_replace('{\\\\|_(?!.*\\\\)}', DIRECTORY_SEPARATOR, "php-markdown/".ltrim($class, '\\')).'.php'; // who does this
 	});
 
-use \Michelf\Markdown;
+use \Michelf\MarkdownExtra;
 
 
 
@@ -59,7 +59,7 @@ function generateBody() {
 	global $main_directory;
 	global $request; //we'll be using this in the menu function
 	if (!isset($_GET['page'])) { //Is the user even requesting a specific page?
-		$parser=new Markdown;
+		$parser=new MarkdownExtra;
 		$text=@file_get_contents("md/index.md");
 		$text=$parser->defaultTransform($text);
 	}else { //User is requesting a page.
@@ -72,7 +72,7 @@ function generateBody() {
 			// Still nothing? Show a 404.
 			if ($text === FALSE) {$text="<h1 color='red'>404 - Page Not Found.";}
 		}else { // We found a Markdown page. Time to translate it.
-			$parser=new Markdown;
+			$parser=new MarkdownExtra;
 			$text = $parser->defaultTransform($text);
 		}
 	}
@@ -91,7 +91,7 @@ function render($menuhtml, $bodyhtml) {
 	$template = @file_get_contents("template.html"); //load our template
 	//make sure we HAVE a template
 	if ($template === FALSE ) {die("<h1 color=red>ERROR: Site administrator has not set a page template. Consult MdCms's documentation for more.</h1>");}
-	$template=str_replace("MDCMS_SITENAME", @file_get_contents("sitename.txt"), $template);  //replace the parts of the site that need it
+	$template=str_replace("MDCMS_SITENAME", "ArghlexNet" , $template);  //replace the parts of the site that need it
 	$template=str_replace("MDCMS_MENU", $menuhtml, $template);
 	$template=str_replace("MDCMS_CONTENT", $bodyhtml, $template);
 	return $template;
